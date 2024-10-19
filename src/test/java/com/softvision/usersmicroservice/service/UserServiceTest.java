@@ -19,6 +19,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -40,12 +41,37 @@ public class UserServiceTest {
     }
 
     @Test
-    public void testDeleteUserById() {
+    public void testDeleteUserById_UserExists() {
         Long userId = 123L;
 
+        // Mock the behavior of the repository
+        when(rep.existsById(userId)).thenReturn(true);
+
+        // Call the method under test
         service.deleteUserById(userId);
 
+        // Verify that the deleteById method was called
         verify(rep, times(1)).deleteById(userId);
+        // Verify that existsById was called
+        verify(rep, times(1)).existsById(userId);
+    }
+    
+    @Test
+    public void testDeleteUserById_UserNotFound() {
+        Long userId = 999L;
+
+        // Mock the behavior of the repository
+        when(rep.existsById(userId)).thenReturn(false);
+
+        // Assert that the UserNotFoundException is thrown
+        assertThrows(UserNotFoundException.class, () -> {
+            service.deleteUserById(userId);
+        });
+
+        // Verify that deleteById was never called
+        verify(rep, never()).deleteById(userId);
+        // Verify that existsById was called
+        verify(rep, times(1)).existsById(userId);
     }
 
     @Test

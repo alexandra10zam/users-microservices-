@@ -1,5 +1,7 @@
 package com.softvision.usersmicroservice.controller;
 import com.softvision.usersmicroservice.dto.UserDTO;
+import com.softvision.usersmicroservice.exceptions.UserNotFoundException;
+
 import javax.ws.rs.*;
 
 import com.softvision.usersmicroservice.service.UserService;
@@ -59,22 +61,23 @@ public class UserController {
 
 
 
-        @PutMapping(path = "/update")
+    @PutMapping(path = "/update")
     public ResponseEntity<UserDTO> updateUserByEmailAndPassword(
-            @QueryParam("email") String email,
-            @QueryParam("password") String password,
+            @RequestParam("email") String email,
+            @RequestParam("password") String password,
             @RequestBody UserDTO userDTO) {
         try {
-            var newUser = service.updateUserByEmailAndPassword(email, password, userDTO);
-            if(newUser != null){
-                return ResponseEntity.status(HttpStatus.CREATED).body(newUser);
-            } else {
-                return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
-            }
-        } catch (EntityNotFoundException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+            UserDTO updatedUser = service.updateUserByEmailAndPassword(email, password, userDTO);
+            return ResponseEntity.ok(updatedUser); // 200 OK on successful update
+        } catch (UserNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build(); // 404 NOT FOUND
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build(); // 400 BAD REQUEST for invalid data
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build(); // 500 INTERNAL SERVER ERROR
         }
     }
+
      @DeleteMapping(path = "/delete")
         public ResponseEntity<UserDTO> deleteUserByEmailAndPassword(
                 @RequestParam("email") String email,

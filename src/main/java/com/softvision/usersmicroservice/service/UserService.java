@@ -18,6 +18,9 @@ public class UserService {
 
 
     public void deleteUserById(Long userId) {
+        if (!rep.existsById(userId)) {
+            throw new UserNotFoundException("User not found");
+        }
         rep.deleteById(userId);
     }
 
@@ -30,28 +33,28 @@ public class UserService {
 
         return null;
     }
+    
     public UserDTO updateUserByEmailAndPassword(String email, String password, UserDTO userDTO) {
-        User existingUser = rep.findByEmailAndPassword(email, password).orElse(null);
-
-        if (existingUser != null) {
-            existingUser.setFirstName(userDTO.getFirstName());
-            existingUser.setLastName(userDTO.getLastName());
-            existingUser.setEmail(userDTO.getEmail());
-            existingUser.setPassword(userDTO.getPassword());
-
-            var updatedUser =  rep.save(existingUser);
-
-            UserDTO newUser = new UserDTO();
-            newUser.setEmail(updatedUser.getEmail());
-            newUser.setPassword(updatedUser.getPassword());
-            newUser.setFirstName(updatedUser.getFirstName());
-            newUser.setLastName(updatedUser.getLastName());
-
-            return newUser;
+        if (userDTO.getFirstName() == null || userDTO.getLastName() == null || userDTO.getEmail() == null || userDTO.getPassword() == null) {
+            throw new IllegalArgumentException("User details must not be null");
         }
-         else {
-             throw new UserNotFoundException("User not found");
-        }
+        
+        User existingUser = rep.findByEmailAndPassword(email, password).orElseThrow(() -> new UserNotFoundException("User not found"));
+    
+        existingUser.setFirstName(userDTO.getFirstName());
+        existingUser.setLastName(userDTO.getLastName());
+        existingUser.setEmail(userDTO.getEmail());
+        existingUser.setPassword(userDTO.getPassword());
+    
+        var updatedUser = rep.save(existingUser);
+    
+        UserDTO newUser = new UserDTO();
+        newUser.setEmail(updatedUser.getEmail());
+        newUser.setPassword(updatedUser.getPassword());
+        newUser.setFirstName(updatedUser.getFirstName());
+        newUser.setLastName(updatedUser.getLastName());
+    
+        return newUser;
     }
 
     public UserDTO save(UserDTO dto) {
@@ -103,6 +106,7 @@ public class UserService {
         }
             return null ;
     }
-
+   
+    
 }
 
