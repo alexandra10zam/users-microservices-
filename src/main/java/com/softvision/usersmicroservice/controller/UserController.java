@@ -3,7 +3,6 @@ import com.softvision.usersmicroservice.dto.UserDTO;
 import javax.ws.rs.*;
 
 import com.softvision.usersmicroservice.service.UserService;
-import com.softvision.usersmicroservice.entity.User;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

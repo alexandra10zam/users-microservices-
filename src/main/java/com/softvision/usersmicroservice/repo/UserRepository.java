@@ -1,5 +1,4 @@
 package com.softvision.usersmicroservice.repo;
-import com.softvision.usersmicroservice.dto.UserDTO;
 import com.softvision.usersmicroservice.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;

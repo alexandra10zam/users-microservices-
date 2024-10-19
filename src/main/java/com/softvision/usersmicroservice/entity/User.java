@@ -2,11 +2,6 @@ package com.softvision.usersmicroservice.entity;
 
 
 import jakarta.persistence.*;
-import org.antlr.v4.runtime.misc.NotNull;
-
-import java.util.UUID;
-
-
 @Entity
 @Table(name = "user")
 public class User {
