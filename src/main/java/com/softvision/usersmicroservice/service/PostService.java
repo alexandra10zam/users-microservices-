@@ -1,5 +1,11 @@
 package com.softvision.usersmicroservice.service;
-
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import java.time.LocalDateTime;
+import java.util.*;
+import com.softvision.usersmicroservice.entity.Post;
+import com.softvision.usersmicroservice.entity.User;
+import com.softvision.usersmicroservice.repo.PostRepository;
 @Service
 public class PostService {
     @Autowired
