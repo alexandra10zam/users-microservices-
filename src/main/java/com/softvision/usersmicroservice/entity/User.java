@@ -1,7 +1,8 @@
 package com.softvision.usersmicroservice.entity;
 
-
 import jakarta.persistence.*;
+import java.util.Set;
+
 @Entity
 @Table(name = "user")
 public class User {
@@ -17,6 +18,8 @@ public class User {
     private String email;
     @Column(name="password")
     private String password;
+    @OneToMany(mappedBy = "author", cascade = CascadeType.ALL)
+    private java.util.Set<Post> posts = new java.util.HashSet<>();
     public User(){
 
     }
@@ -65,4 +68,12 @@ public class User {
     public String getPassword(){
         return password;
     }
+        public Set<Post> getPosts() {
+        return posts;
+    }
+
+    public void setPosts(Set<Post> posts) {
+        this.posts = posts;
+    }
 }
+
