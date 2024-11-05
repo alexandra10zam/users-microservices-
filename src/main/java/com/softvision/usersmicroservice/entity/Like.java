@@ -1,5 +1,7 @@
 package com.softvision.usersmicroservice.entity;
 import jakarta.persistence.*;
+@Entity
+@Table(name = "user_like")
 public class Like {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

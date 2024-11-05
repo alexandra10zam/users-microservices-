@@ -9,18 +9,23 @@ import com.softvision.usersmicroservice.repo.LikeRepository;
 
 @Service
 public class LikeService {
+
     @Autowired
     private LikeRepository likeRepository;
 
+    // Method to like a post
     public void likePost(User user, Long postId) {
-        if (likeRepository.findByUserIdAndPostId(user.getUserid(), postId).isEmpty()) {
+        // Check if the user has already liked the post
+        if (likeRepository.findByUser_UseridAndPost_Id(user.getUserid(), postId).isEmpty()) {
             Like like = new Like();
             like.setUser(user);
             like.setPost(new Post()); 
             likeRepository.save(like);
         }
     }
+
+    // Method to unlike a post
     public void unlikePost(User user, Long postId) {
-        likeRepository.findByUserIdAndPostId(user.getUserid(), postId).ifPresent(likeRepository::delete);
+        likeRepository.findByUser_UseridAndPost_Id(user.getUserid(), postId).ifPresent(likeRepository::delete);
     }
 }
